@@ -2,26 +2,47 @@ import ProductCard from "@/components/ProductCard";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel";
 import RelatedProducts from "@/components/RelatedProducts";
 import Wrapper from "@/components/Wrapper";
+import { addToCart } from "@/store/cartSlice";
 import { fetchData } from "@/utils/api";
 import { getDiscountedPricePercentage } from "@/utils/helper";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 import ReactMarkdown from "react-markdown";
+import { useDispatch } from "react-redux";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductDetails = ({ product, products }) => {
   const [selectedSize, setSelectedSize] = useState();
   const [showError, setShowError] = useState(false);
+  const dispatch = useDispatch();
+
   const p = product?.data?.[0]?.attributes;
+
+  const notify = () => {
+    toast.success("Successfully added to your cart!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
   return (
     <div className="w-full md:py-20">
+      <ToastContainer />
       <Wrapper>
         <div className="flex flex-col lg:flex-row md:px-10 gap-[50px] lg:gap-[100px]">
           <div className="w-full md:w-auto flex-[1.5] max-w-[500px] lg:max-w-full mx-auto lg:mx-0">
             <ProductDetailsCarousel images={p.image.data} />
           </div>
           <div className="flex-[1] py-3">
-            <div className="text-[34px] font-semibold mb-2">{p.name}</div>
+            <div className="text-[34px] font-semibold mb-2 leading-tight">{p.name}</div>
             <div className="text-lg font-semibold mb-5">{p.subtitle}</div>
             <div className="flex items-center">
               <p className="mr-2 text-lg font-semibold">
@@ -117,7 +138,8 @@ const ProductDetails = ({ product, products }) => {
 
             <button
               className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 if (!selectedSize) {
                   setShowError(true);
 
@@ -125,6 +147,15 @@ const ProductDetails = ({ product, products }) => {
                     block: "center",
                     behavior: "smooth",
                   });
+                } else {
+                  dispatch(
+                    addToCart({
+                      ...product?.data?.[0],
+                      selectedSize,
+                      singleQuantityPrice: p.price,
+                    })
+                  );
+                  notify();
                 }
               }}
             >
@@ -142,7 +173,7 @@ const ProductDetails = ({ product, products }) => {
             </div>
           </div>
         </div>
-        {/* <RelatedProducts /> */}
+        <RelatedProducts products={products} />
       </Wrapper>
     </div>
   );
