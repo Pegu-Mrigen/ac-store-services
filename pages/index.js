@@ -1,25 +1,12 @@
 import HeroBanner from "@/components/HeroBanner";
 import Wrapper from "@/components/Wrapper";
 import ProductCard from "./../components/ProductCard";
-import { useState } from "react";
-import { useEffect } from "react";
 import { fetchData } from "@/utils/api";
 
 export default function Home({ products }) {
-  // const [data, setData] = useState(null);
-
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
-  // const fetchProducts = async () => {
-  //   const { data } = await fetchData("/api/products");
-  //   setData(data);
-  // };
   return (
     <main>
       <HeroBanner />
-      {/* <h1>{data?.[0]?.attributes?.name}</h1> */}
-      {/* <h1>{products?.data?.[0]?.attributes?.name}</h1> */}
       <Wrapper>
         <div className="text-center max-w-[800px] mx-auto my-[50px] md:my-[80px]">
           <div className="text-[28px] md:text-[34px] mb-5 font-semibold leading-tight">
@@ -35,29 +22,14 @@ export default function Home({ products }) {
           {products?.data?.map((product) => (
             <ProductCard key={product?.id} data={product} />
           ))}
-          {/* <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard /> */}
         </div>
       </Wrapper>
     </main>
   );
 }
-
 export async function getStaticProps() {
   const products = await fetchData("/api/products?populate=*");
-
   return {
-    // props:{products:products}
     props: { products },
   };
 }

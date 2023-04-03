@@ -16,11 +16,8 @@ const Header = () => {
   const [showCatMenu, setShowCatMenu] = useState(false);
   const [show, setShow] = useState("translate-y-0");
   const [lastScrollY, setLastScrollY] = useState(0);
-
   const [categories, setCategories] = useState(null);
-
   const { cartItems } = useSelector((state) => state.cart);
-
   const controlNavbar = () => {
     if (window.scrollY > 200) {
       if (window.scrollY > lastScrollY && !mobileMenu) {
@@ -33,10 +30,8 @@ const Header = () => {
     }
     setLastScrollY(window.scrollY);
   };
-
   useEffect(() => {
     window.addEventListener("scroll", controlNavbar);
-
     return () => {
       window.removeEventListener("scroll", controlNavbar);
     };
@@ -56,7 +51,7 @@ const Header = () => {
     >
       <Wrapper className="h-[60px] flex justify-between items-center">
         <Link href="/">
-          <img src="/logo.svg" alt="logo" className="w-[40px] md:w-[60px]" />
+          <img src="/logo.png" alt="logo" className="w-[40px] md:w-[60px]" />
         </Link>
         <Menu
           showCatMenu={showCatMenu}
@@ -79,18 +74,20 @@ const Header = () => {
               className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]
             "
             >
-              51
+              13
             </div>
           </div>
           <Link href="/cart">
             <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative">
               <BsCart className="text-[15px] md:text-[20px] " />
-            {cartItems.length>0 && <div
-              className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]
+              {cartItems.length > 0 && (
+                <div
+                  className="h-[14px] md:h-[18px] min-w-[14px] md:min-w-[18px] rounded-full bg-red-600 absolute top-1 left-5 md:left-7 text-white text-[10px] md:text-[12px] flex justify-center items-center px-[2px] md:px-[5px]
           "
-            >
-              {cartItems.length}
-            </div>}
+                >
+                  {cartItems.length}
+                </div>
+              )}
             </div>
           </Link>
           <div className="w-8 md:w-12 h-8 md:h-12 rounded-full flex justify-center items-center hover:bg-black/[0.05] cursor-pointer relative -mr-2">
